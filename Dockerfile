@@ -31,7 +31,7 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set environment variables (to be provided during runtime)
-ENV REGION=""
+ENV REGION="cn-hangzhou"
 ENV ACCESS_KEY_ID=""
 ENV ACCESS_KEY_SECRET=""
 ENV DOMAIN=""
