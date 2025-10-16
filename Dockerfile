@@ -11,9 +11,12 @@ RUN wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz && \
     rm aliyun-cli-linux-latest-amd64.tgz
 
 # Copy and install certbot-dns-aliyun plugin
-RUN wget https://cdn.jsdelivr.net/gh/justjavac/certbot-dns-aliyun@main/alidns.sh && \
-    mv alidns.sh /usr/local/bin/alidns && \
+COPY alidns.sh /usr/local/bin/alidns && \
     chmod +x /usr/local/bin/alidns
+
+#RUN wget https://cdn.jsdelivr.net/gh/justjavac/certbot-dns-aliyun@main/alidns.sh && \
+#    mv alidns.sh /usr/local/bin/alidns && \
+#    chmod +x /usr/local/bin/alidns
 
 # Create virtual environment for Python packages
 RUN python3 -m venv /opt/venv
@@ -33,7 +36,7 @@ ENV ACCESS_KEY_ID=""
 ENV ACCESS_KEY_SECRET=""
 ENV DOMAIN=""
 ENV EMAIL=""
-ENV CRON_SCHEDULE="0 0 * * *"
+ENV CRON_SCHEDULE="0 0 * * 1"
 
 # Setup cron job for certbot renew
 RUN echo "$CRON_SCHEDULE /usr/bin/certbot renew --manual --preferred-challenges dns --manual-auth-hook '/usr/local/bin/alidns' --manual-cleanup-hook '/usr/local/bin/alidns clean' --agree-tos --email $EMAIL --deploy-hook 'cp -r /etc/letsencrypt/live/$DOMAIN/* /etc/letsencrypt/certs'" > /etc/crontabs/root
